@@ -65,3 +65,210 @@ h1, h2, h3 {
     scroll-behavior: auto !important;
   }
 }
+
+.topbar {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 1rem clamp(1rem, 4vw, 3rem);
+}
+
+.wordmark {
+  font-family: 'Fraunces', serif;
+  font-size: var(--step-1);
+  color: var(--cinnamon-dark);
+  text-decoration: none;
+}
+
+.nav-pill {
+  display: flex;
+  gap: clamp(0.75rem, 2vw, 1.75rem);
+  padding: 0.6rem 1.25rem;
+  background: rgba(255, 253, 249, 0.72);
+  backdrop-filter: blur(12px);
+  border-radius: 999px;
+  box-shadow: var(--shadow-soft);
+}
+
+.nav-pill a, .ig-button {
+  color: var(--cinnamon);
+  text-decoration: none;
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
+}
+
+.ig-button {
+  padding: 0.6rem 1.1rem;
+  background: var(--cinnamon-dark);
+  color: var(--frosting);
+  border-radius: 999px;
+}
+
+.hero {
+  position: relative;
+  min-height: 100svh;
+  display: grid;
+  place-items: center;
+  overflow: clip;
+  background:
+    radial-gradient(120% 80% at 50% 18%, var(--frosting) 0%, var(--cream) 45%, var(--cream-deep) 100%);
+}
+
+/* The arc lives in its own 3D context so cards can tip without the
+   browser re-laying-out the page on every frame. */
+.hero-arc {
+  position: absolute;
+  inset: 0;
+  perspective: 1200px;
+  transform-style: preserve-3d;
+  pointer-events: none;
+}
+
+.arc-card {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  width: clamp(90px, 12vw, 168px);
+  aspect-ratio: 1;
+  margin: 0;
+  display: grid;
+  place-items: center;
+  background: var(--frosting);
+  border-radius: 26%;
+  box-shadow: var(--shadow-soft);
+  will-change: transform, opacity;
+  /* JS writes the real transform; this keeps it centered before first paint. */
+  transform: translate(-50%, -50%);
+}
+
+.arc-card img { width: 72%; height: auto; }
+
+.hero-stage {
+  position: relative;
+  z-index: 10;
+  display: grid;
+  justify-items: center;
+  translate: 0 -4vh;
+}
+
+.hero-pans {
+  position: relative;
+  width: clamp(240px, 34vw, 460px);
+  aspect-ratio: 1;
+}
+
+.hero-pan {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  will-change: opacity, transform;
+}
+
+.hero-pan.is-active { opacity: 1; }
+
+.hero-mound {
+  position: absolute;
+  bottom: -6%;
+  width: clamp(320px, 46vw, 620px);
+  z-index: -1;
+  opacity: 0.9;
+}
+
+.hero-flavor {
+  font-family: 'Fraunces', serif;
+  font-size: var(--step-3);
+  color: var(--cinnamon-dark);
+  margin: 0.2em 0 0.4em;
+}
+
+.hero-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.9rem;
+  padding: 0.5rem 0.5rem 0.5rem 1.2rem;
+  background: var(--frosting);
+  border-radius: 999px;
+  box-shadow: var(--shadow-lift);
+}
+
+.hero-price { font-weight: 600; color: var(--cinnamon-dark); }
+
+.hero-order {
+  padding: 0.6rem 1.4rem;
+  background: var(--cinnamon-dark);
+  color: var(--frosting);
+  border-radius: 999px;
+  text-decoration: none;
+}
+
+/* Oversized headline hugging the bottom, partly hidden behind the product --
+   the reference's signature move. */
+.hero-headline {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  translate: -50% 0;
+  z-index: 5;
+  margin: 0;
+  width: max-content;
+  max-width: 96vw;
+  text-align: center;
+  font-size: var(--step-5);
+  line-height: 0.92;
+  color: var(--cinnamon-dark);
+  opacity: 0.92;
+  pointer-events: none;
+}
+
+/* Cards must accept pointer events even though the arc itself does not,
+   so hover-to-pause works without the arc swallowing clicks on the pan. */
+.arc-card { pointer-events: auto; }
+
+/* Keyboard and screen-reader access to the carousel. Visually hidden until
+   focused, then shown as real buttons -- never display:none, which would
+   remove them from the tab order entirely. */
+.arc-controls {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+
+.arc-controls:focus-within {
+  position: static;
+  width: auto;
+  height: auto;
+  overflow: visible;
+  clip-path: none;
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.arc-controls button {
+  font: inherit;
+  font-size: var(--step--1);
+  padding: 0.5rem 1rem;
+  border: 0;
+  border-radius: 999px;
+  background: var(--cinnamon-dark);
+  color: var(--frosting);
+  cursor: pointer;
+}
+
+@media (max-width: 767px) {
+  .arc-card { border-radius: 30%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
+  /* Shrink the nav rather than hiding it -- phones are the main audience and
+     still need a way to reach the menu and the order form. */
+  .nav-pill { gap: 0.6rem; padding: 0.45rem 0.8rem; font-size: 0.78rem; }
+  .nav-pill a { font-size: 0.78rem; }
+  .wordmark { font-size: var(--step-0); }
+  .ig-button { padding: 0.45rem 0.8rem; }
+}

@@ -1,3 +1,6 @@
-import { FLAVORS, MENU, FACTS } from './data.js';
+import { buildHero } from './hero-dom.js';
+import { FLAVORS } from './data.js';
 
-console.log('loaded', FLAVORS.length, 'flavors,', MENU.length, 'menu items,', FACTS.pickupArea);
+const hero = buildHero(document.querySelector('.hero'));
+hero.nameEl.textContent = FLAVORS[0].name;
+hero.priceEl.textContent = `$${FLAVORS[0].price}`;
