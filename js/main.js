@@ -15,6 +15,18 @@ if (typeof gsap === 'undefined' || typeof ScrollTrigger === 'undefined') {
   // The cart icon orders whatever flavor is currently centered in the arc.
   // The order form arrives in a later task; until then this falls back to the
   // menu so the button is never a dead end.
+  // Hide nav links whose target section does not exist yet. The site is being
+  // built section by section, and a public page must never offer a link that
+  // silently does nothing. These reappear on their own as sections land.
+  document.querySelectorAll('.nav-pill a[href^="#"]').forEach((a) => {
+    if (!document.querySelector(a.getAttribute('href'))) a.remove();
+  });
+
+  // Same for the hero's Order button, but repoint rather than remove it: the
+  // call to action must survive even before the order form exists.
+  const heroOrder = document.querySelector('.hero-order');
+  if (!document.querySelector('#order')) heroOrder.setAttribute('href', '#menu');
+
   const cart = document.querySelector('.nav-cart');
   const orderFlavor = () => {
     const flavor = carousel.selectedFlavor();
