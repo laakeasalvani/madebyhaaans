@@ -1,35 +1,54 @@
+/**
+ * Single source of truth for everything the site sells and says.
+ *
+ * Image paths are a contract: replacing a photo means overwriting the file at
+ * the same path, never editing code. See docs/photo-shot-list.md.
+ *
+ * To change the seasonal special, edit ONLY the last FLAVORS entry -- its name,
+ * price and alt text -- and drop a new image at images/roll-seasonal.webp.
+ */
+
 export const FLAVORS = [
   {
     id: 'original',
     name: 'Original',
     price: 28,
-    panImage: 'images/pan-original.webp',
+    rollImage: 'images/roll-original.webp',
     cardImage: 'images/card-original.webp',
-    alt: 'A pan of eight classic cinnamon rolls with white frosting',
+    alt: 'A classic cinnamon roll with thick white cream cheese frosting',
   },
   {
     id: 'ham-cheese',
     name: 'Ham & Cheese',
     price: 36,
-    panImage: 'images/pan-ham-cheese.webp',
+    rollImage: 'images/roll-ham-cheese.webp',
     cardImage: 'images/card-ham-cheese.webp',
-    alt: 'A pan of eight savory ham and cheese rolls, golden brown',
+    alt: 'A savory roll layered with ham and melted cheddar, baked golden brown',
   },
   {
     id: 'birthday-cake',
     name: 'Birthday Cake',
     price: 30,
-    panImage: 'images/pan-birthday-cake.webp',
+    rollImage: 'images/roll-birthday-cake.webp',
     cardImage: 'images/card-birthday-cake.webp',
-    alt: 'A pan of eight cinnamon rolls topped with rainbow sprinkles',
+    alt: 'A cinnamon roll with white frosting covered in rainbow sprinkles',
   },
   {
     id: 'oreo',
     name: 'Oreo',
     price: 30,
-    panImage: 'images/pan-oreo.webp',
+    rollImage: 'images/roll-oreo.webp',
     cardImage: 'images/card-oreo.webp',
-    alt: 'A pan of eight cinnamon rolls covered in crushed chocolate cookie crumbs',
+    alt: 'A cinnamon roll topped with white frosting and crushed chocolate cookie crumbs',
+  },
+  {
+    id: 'seasonal',
+    name: "This Month's Special",
+    price: 30,
+    rollImage: 'images/roll-seasonal.webp',
+    cardImage: 'images/card-seasonal.webp',
+    alt: 'This month\'s rotating specialty cinnamon roll',
+    seasonal: true,
   },
 ];
 

@@ -11,7 +11,7 @@ export const ARC = {
   radius: 1400,      // px — larger radius, shallower arc
   spanDeg: 60,       // total angular span the cards loop through
   minScale: 0.66,    // scale at the outermost edge
-  minOpacity: 0.15,  // opacity at the outermost edge
+  minOpacity: 0.55,  // opacity at the outermost edge
 };
 
 const DEG = Math.PI / 180;
@@ -42,7 +42,9 @@ export function cardTransform(angleDeg, cfg = ARC) {
     y: radius * (1 - Math.cos(rad)),
     rotate: angleDeg,
     scale: 1 - (1 - minScale) * t,
-    opacity: 1 - (1 - minOpacity) * t,
+    // Quadratic, not linear: cards either side of centre should read as solid
+    // white like the reference, with the fade saved for the outermost edge.
+    opacity: 1 - (1 - minOpacity) * t * t,
     zIndex: Math.round(100 - t * 100),
   };
 }

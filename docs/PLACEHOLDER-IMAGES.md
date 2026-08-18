@@ -1,36 +1,36 @@
 # Placeholder Images
 
-The image generation service ran out of credits mid-build. The files below are
-temporary stand-ins so the layout could be built and verified before the real
-product photography is ready.
+The image generation service ran out of credits mid-build (free plan, 0 credits).
+Laakea is supplying real photographs. Everything below is a temporary stand-in
+so the layout could be built and verified.
 
-| Placeholder file | Stands in for |
-| --- | --- |
-| `images/pan-ham-cheese.webp` | copy of `images/pan-original.webp` |
-| `images/card-ham-cheese.webp` | copy of `images/card-original.webp` |
-| `images/card-oreo.webp` | copy of `images/card-birthday-cake.webp` |
-| `images/mound.webp` | copy of `images/card-original.webp` |
-| `images/frosting-tub.webp` | copy of `images/card-original.webp` |
+## Revision A changed what images are needed
 
-These are duplicates of other images, not real product photos. Every file
-listed here must be replaced before launch.
+The hero product is now a SINGLE cinnamon roll, not a pan, and there are five
+cards instead of four. The old `pan-*.webp` files have been removed.
+
+| Path | What it must become | Current stand-in |
+| --- | --- | --- |
+| `images/roll-original.webp` | one Original roll | old pan photo |
+| `images/roll-ham-cheese.webp` | one Ham & Cheese roll | copy of pan-original |
+| `images/roll-birthday-cake.webp` | one Birthday Cake roll | old pan photo |
+| `images/roll-oreo.webp` | one Oreo roll | old pan photo |
+| `images/roll-seasonal.webp` | the monthly special | copy of pan-original |
+| `images/card-original.webp` | cinnamon stick / ingredient | real |
+| `images/card-ham-cheese.webp` | ham + cheese | copy of card-original |
+| `images/card-birthday-cake.webp` | sprinkles | real |
+| `images/card-oreo.webp` | an Oreo | copy of card-birthday-cake |
+| `images/card-seasonal.webp` | something seasonal | copy of card-birthday-cake |
+| `images/frosting-tub.webp` | a 16 oz frosting tub | copy of card-original |
+| `images/mound.webp` | cinnamon sugar mound | copy of card-original |
+
+All four roll images MUST be shot from the same angle, or the crossfade between
+flavors will jump. See docs/photo-shot-list.md.
 
 ## Verification
-
-Confirmed by content hash on 2026-08-18: the 10 files in `images/` contain only
-5 unique images. The 5 files listed above are byte-identical copies of other
-files, so `mound.webp` and `frosting-tub.webp` currently both render the
-cinnamon-stick card art rather than a mound of cinnamon sugar or a tub of
-frosting.
-
-Check at any time with:
 
 ```bash
 cd images && md5 -q *.webp | sort | uniq -d
 ```
 
-Any output means duplicates remain. Expect no output once real photos land.
-Decision on 2026-08-18 (Laakea): continue building with placeholders and swap
-real photos in later. Filenames are a fixed contract -- replacing a photo means
-overwriting the file, never editing code. See docs/photo-shot-list.md for how
-the real photos must be shot so the hero crossfade lines up.
+Output means duplicates remain. Expect none once real photos land.

@@ -66,6 +66,13 @@ h1, h2, h3 {
   }
 }
 
+/* ---------------------------------------------------------------------------
+   Hero
+   Proportions are measured off the reference: product ~55% of viewport height,
+   flavor cards ~25%. Sizing is in vh (not vw) so the relationship between the
+   roll and the cards holds as the window changes shape.
+   --------------------------------------------------------------------------- */
+
 .topbar {
   position: fixed;
   inset: 0 0 auto;
@@ -83,28 +90,50 @@ h1, h2, h3 {
   text-decoration: none;
 }
 
+/* Five icon buttons in a floating pill, as in the reference. */
 .nav-pill {
   display: flex;
-  gap: clamp(0.75rem, 2vw, 1.75rem);
-  padding: 0.6rem 1.25rem;
-  background: rgba(255, 253, 249, 0.72);
+  align-items: center;
+  gap: clamp(0.15rem, 0.6vw, 0.4rem);
+  padding: 0.35rem;
+  background: rgba(255, 253, 249, 0.78);
   backdrop-filter: blur(12px);
   border-radius: 999px;
   box-shadow: var(--shadow-soft);
 }
 
-.nav-pill a, .ig-button {
+.nav-pill a,
+.nav-pill button {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
   color: var(--cinnamon);
-  text-decoration: none;
-  font-size: var(--step--1);
-  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.25s, color 0.25s, transform 0.25s;
 }
+
+.nav-pill svg { width: 1.25rem; height: 1.25rem; fill: currentColor; }
+
+.nav-pill a:hover,
+.nav-pill button:hover { background: var(--cream-deep); transform: translateY(-1px); }
+
+/* The cart sits highlighted at the end of the pill, like the reference. */
+.nav-cart { background: var(--cinnamon-dark) !important; color: var(--frosting) !important; }
+.nav-cart:hover { background: var(--ink) !important; }
 
 .ig-button {
   padding: 0.6rem 1.1rem;
   background: var(--cinnamon-dark);
   color: var(--frosting);
   border-radius: 999px;
+  text-decoration: none;
+  font-size: var(--step--1);
+  letter-spacing: 0.04em;
 }
 
 .hero {
@@ -112,19 +141,19 @@ h1, h2, h3 {
   min-height: 100svh;
   display: grid;
   justify-items: center;
-  /* Anchor the product stack to the bottom of a reserved zone rather than
-     centering across the full section -- the reserved padding-bottom keeps
-     the flavor name and price pill clear of the headline below them. See
-     .hero-headline for why this value has to match its own line math. */
-  align-content: end;
-  padding-bottom: calc(2 * 0.86 * clamp(2.3rem, 1.4rem + 4.2vw, 5rem) + 1.75rem);
+  align-content: center;
   overflow: clip;
   background:
-    radial-gradient(120% 80% at 50% 18%, var(--frosting) 0%, var(--cream) 45%, var(--cream-deep) 100%);
+    radial-gradient(120% 80% at 50% 42%, var(--frosting) 0%, var(--cream) 48%, var(--cream-deep) 100%);
+  /* Clear the fixed topbar so the flavour name never sits under the nav pill. */
+  padding-top: 5.5rem;
+  /* No bottom reservation: the headline is MEANT to run behind the product
+     here, which is the reference's signature move. The pill is pulled up onto
+     the product below so it stays legible without pushing everything apart. */
+  padding-bottom: 0;
 }
 
-/* The arc lives in its own 3D context so cards can tip without the
-   browser re-laying-out the page on every frame. */
+/* Its own 3D context, so cards tip without forcing page layout. */
 .hero-arc {
   position: absolute;
   inset: 0;
@@ -133,24 +162,46 @@ h1, h2, h3 {
   pointer-events: none;
 }
 
+/* Cards are ~25% of viewport height and deliberately overflow the screen
+   edges, so the arc reads as continuing past the frame. */
 .arc-card {
   position: absolute;
-  top: 42%;
+  top: 46%;
   left: 50%;
-  width: clamp(90px, 12vw, 168px);
-  aspect-ratio: 1;
+  width: 25vh;
+  height: 25vh;
   margin: 0;
+  padding: 0;
+  border: 0;
   display: grid;
   place-items: center;
+  align-content: center;
+  gap: 0.35rem;
   background: var(--frosting);
-  border-radius: 26%;
+  border-radius: 24%;
   box-shadow: var(--shadow-soft);
+  cursor: pointer;
+  pointer-events: auto;
   will-change: transform, opacity;
-  /* JS writes the real transform; this keeps it centered before first paint. */
   transform: translate(-50%, -50%);
+  transition: box-shadow 0.3s, outline-color 0.2s;
+  outline: 2px solid transparent;
+  outline-offset: 4px;
 }
 
-.arc-card img { width: 72%; height: auto; }
+.arc-card img { width: 62%; height: auto; }
+
+.arc-card-label {
+  font-size: clamp(0.6rem, 1.5vh, 0.85rem);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--cinnamon);
+}
+
+.arc-card:hover { box-shadow: var(--shadow-lift); }
+.arc-card:focus-visible { outline-color: var(--caramel); }
+.arc-card.is-selected { box-shadow: var(--shadow-lift); }
+.arc-card.is-seasonal .arc-card-label { color: var(--caramel); font-weight: 600; }
 
 .hero-stage {
   position: relative;
@@ -159,13 +210,15 @@ h1, h2, h3 {
   justify-items: center;
 }
 
-.hero-pans {
+/* The product: ~55% of viewport height, the anchor of the whole screen. */
+.hero-rolls {
   position: relative;
-  width: clamp(220px, 28vw, 360px);
-  aspect-ratio: 1;
+  width: 55vh;
+  height: 55vh;
+  max-width: 92vw;
 }
 
-.hero-pan {
+.hero-roll {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -175,21 +228,16 @@ h1, h2, h3 {
   will-change: opacity, transform;
 }
 
-.hero-pan.is-active { opacity: 1; }
+.hero-roll.is-active { opacity: 1; }
 
-.hero-mound {
-  position: absolute;
-  bottom: -6%;
-  width: clamp(320px, 46vw, 620px);
-  z-index: -1;
-  opacity: 0.9;
-}
-
+/* Name sits ABOVE the roll now -- below, it competed with the pill and the
+   headline for the same band of space. */
 .hero-flavor {
   font-family: 'Fraunces', serif;
   font-size: var(--step-3);
   color: var(--cinnamon-dark);
-  margin: 0.2em 0 0.4em;
+  margin: 0 0 0.15em;
+  text-align: center;
 }
 
 .hero-pill {
@@ -197,6 +245,9 @@ h1, h2, h3 {
   align-items: center;
   gap: 0.9rem;
   padding: 0.5rem 0.5rem 0.5rem 1.2rem;
+  /* Pulled up so it overlaps the lower part of the product, as in the
+     reference, instead of pushing the layout taller. */
+  margin-top: -6vh;
   background: var(--frosting);
   border-radius: 999px;
   box-shadow: var(--shadow-lift);
@@ -212,16 +263,15 @@ h1, h2, h3 {
   text-decoration: none;
 }
 
-/* Oversized headline hugging the bottom, partly hidden behind the product --
-   the reference's signature move. Sized with its own clamp (not --step-5)
-   because .hero's padding-bottom above has to reserve exactly this much
-   room -- keep the two in sync if either changes. */
+/* Oversized headline hugging the bottom, running behind the product --
+   the reference's signature move. */
 .hero-headline {
   position: absolute;
   bottom: 0;
   left: 50%;
   translate: -50% 0;
-  z-index: 5;
+  /* Behind the product, which carries z-index 10. */
+  z-index: 1;
   margin: 0;
   width: max-content;
   max-width: 96vw;
@@ -233,13 +283,8 @@ h1, h2, h3 {
   pointer-events: none;
 }
 
-/* Cards must accept pointer events even though the arc itself does not,
-   so hover-to-pause works without the arc swallowing clicks on the pan. */
-.arc-card { pointer-events: auto; }
-
-/* Keyboard and screen-reader access to the carousel. Visually hidden until
-   focused, then shown as real buttons -- never display:none, which would
-   remove them from the tab order entirely. */
+/* Keyboard access to the arc. Visually hidden until focused -- never
+   display:none, which would drop them from the tab order. */
 .arc-controls {
   position: absolute;
   width: 1px;
@@ -271,23 +316,19 @@ h1, h2, h3 {
 }
 
 @media (max-width: 767px) {
-  .arc-card { border-radius: 30%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
-  /* Shrink the nav rather than hiding it -- phones are the main audience and
-     still need a way to reach the menu and the order form. Nowrap plus a
-     tighter scale keeps it one line instead of wrapping each link. */
-  .nav-pill { gap: 0.4rem; padding: 0.4rem 0.65rem; font-size: 0.7rem; }
-  .nav-pill a { font-size: 0.7rem; white-space: nowrap; }
+  /* Roll drops to ~40% so the nav, name, pill and headline all still fit. */
+  .hero-rolls { width: 30vh; height: 30vh; }
+  .arc-card { width: 14vh; height: 14vh; border-radius: 26%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
+  .nav-pill { gap: 0.05rem; padding: 0.25rem; }
+  .nav-pill a, .nav-pill button { width: 2.1rem; height: 2.1rem; }
+  .nav-pill svg { width: 1.05rem; height: 1.05rem; }
   .wordmark { font-size: var(--step-0); }
-  .ig-button { padding: 0.45rem 0.8rem; }
-
-  /* At narrow widths the headline's second line soft-wraps again, so it
-     renders as three lines, not two -- the reserved space and its font
-     size are recalculated here to match, keeping the pill and flavor
-     name clear of it (same reasoning as the base .hero rule above). */
-  .hero-pans { width: clamp(190px, 42vw, 320px); }
-  .hero { padding-bottom: calc(3 * 0.88 * clamp(2rem, 7vw, 3rem) + 1.5rem); }
-  .hero-headline { font-size: clamp(2rem, 7vw, 3rem); line-height: 0.88; max-width: 90vw; }
+  .ig-button { display: none; }
+  .hero-headline { font-size: clamp(1.7rem, 6.4vw, 2.6rem); max-width: 92vw; }
+  .hero { padding-top: 4.5rem; }
+  .hero-pill { margin-top: -4vh; }
 }
+
 
 .menu-grid {
   display: grid;
