@@ -147,10 +147,9 @@ h1, h2, h3 {
     radial-gradient(120% 80% at 50% 42%, var(--frosting) 0%, var(--cream) 48%, var(--cream-deep) 100%);
   /* Clear the fixed topbar so the flavour name never sits under the nav pill. */
   padding-top: 5.5rem;
-  /* No bottom reservation: the headline is MEANT to run behind the product
-     here, which is the reference's signature move. The pill is pulled up onto
-     the product below so it stays legible without pushing everything apart. */
-  padding-bottom: 0;
+  /* The headline is in flow now, so the hero just needs breathing room at the
+     bottom rather than a reserved band. */
+  padding-bottom: 2rem;
 }
 
 /* Its own 3D context, so cards tip without forcing page layout. */
@@ -166,7 +165,9 @@ h1, h2, h3 {
    edges, so the arc reads as continuing past the frame. */
 .arc-card {
   position: absolute;
-  top: 46%;
+  /* Set from JS to the product's actual centre; the literal is only a
+     pre-paint fallback. */
+  top: var(--arc-y, 46%);
   left: 50%;
   width: 31vh;
   height: 31vh;
@@ -267,21 +268,19 @@ h1, h2, h3 {
   text-decoration: none;
 }
 
-/* Oversized headline hugging the bottom, running behind the product --
-   the reference's signature move. */
+/* Sits in normal flow directly beneath the price pill. It used to be pinned
+   to the bottom of the viewport and run behind the product, but at desktop
+   sizes the pill landed on top of the words, and on phones the headline was
+   stranded far below everything else. In flow it stays tight to the pill at
+   every size. */
 .hero-headline {
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  translate: -50% 0;
-  /* Behind the product, which carries z-index 10. */
+  position: static;
   z-index: 1;
-  margin: 0;
-  width: max-content;
+  margin: 1.2rem 0 0;
   max-width: 96vw;
   text-align: center;
   font-size: clamp(2.3rem, 1.4rem + 4.2vw, 5rem);
-  line-height: 0.86;
+  line-height: 0.94;
   color: var(--cinnamon-dark);
   opacity: 0.92;
   pointer-events: none;
@@ -327,14 +326,14 @@ h1, h2, h3 {
   .hero-rolls { width: 28vh; height: 28vh; }
   /* Lifted above the roll's widest band: at the shared centre line the
      product overlapped each card's lower half, clipping its label. */
-  .arc-card { top: 36%; width: 15vh; height: 15vh; border-radius: 26%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
+  .arc-card { width: 15vh; height: 15vh; border-radius: 26%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
   .nav-pill { gap: 0.05rem; padding: 0.25rem; }
   .nav-pill a, .nav-pill button { width: 2.1rem; height: 2.1rem; }
   .nav-pill svg { width: 1.05rem; height: 1.05rem; }
   .wordmark { font-size: var(--step-0); }
   .ig-button { display: none; }
-  .hero-headline { font-size: clamp(1.7rem, 6.4vw, 2.6rem); max-width: 92vw; }
-  .hero { padding-top: 4.5rem; }
+  .hero-headline { font-size: clamp(1.7rem, 6.4vw, 2.6rem); max-width: 92vw; margin-top: 1rem; }
+  .hero { padding-top: 4.5rem; padding-bottom: 1.5rem; }
   .hero-pill { margin-top: -4vh; }
 }
 

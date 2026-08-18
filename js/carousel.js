@@ -46,7 +46,28 @@ export function initCarousel({ cards, rolls, nameEl, priceEl }) {
 
   const cfg = { ...ARC, radius: radiusFor() };
 
+  // Pin the arc to the product's real centre. The cards used to sit at a fixed
+  // percentage of the hero, so any change to the stack above them -- the
+  // headline moving into flow, for instance -- slid the product out from under
+  // the arc and the cards ended up clipped behind it.
+  function alignArcToProduct() {
+    const rolls = document.querySelector('.hero-rolls');
+    const arcEl = document.querySelector('.hero-arc');
+    if (!rolls || !arcEl) return;
+    const r = rolls.getBoundingClientRect();
+    const a = arcEl.getBoundingClientRect();
+    if (!r.height || !a.height) return;
+    // On a phone the arc has to sit close in (there is no width to spare), so
+    // aligning it with the product's centre buries the cards behind the widest
+    // part of the roll. Lift it toward the roll's upper edge there; on desktop
+    // there is room beside the product, so centre is correct.
+    const lift = NARROW.matches ? r.height * 0.45 : 0;
+    const centreY = ((r.top + r.height / 2 - lift) - a.top) / a.height * 100;
+    arcEl.style.setProperty('--arc-y', centreY.toFixed(2) + '%');
+  }
+
   function layout() {
+    alignArcToProduct();
     for (let i = 0; i < count; i++) {
       const angle = angleFor(i, count, state.progress, cfg.spanDeg);
       const t = cardTransform(angle, cfg);
