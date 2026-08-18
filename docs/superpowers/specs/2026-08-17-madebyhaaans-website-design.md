@@ -204,3 +204,62 @@ so it is greppable and cannot be launched by accident.
 - A custom domain (free `github.io` URL to start)
 - Multiple pages — everything lives on one scrolling page
 - Real 3D / WebGL models
+
+---
+
+# Revision A - 2026-08-18
+
+Requested after reviewing the built hero against the reference at full size.
+The hero was too timid: product too small, cards too small, and autoplay took
+control away from the visitor. Sections 4.1 and 5.2 are superseded by this.
+
+## What changed and why
+
+**Product is a single cinnamon roll, not a pan.** A pan reads as a tray of food;
+a single roll reads as a product. Laakea is supplying real photographs.
+
+**Proportions now match the reference.** Measured off the reference frame: the
+product occupies roughly 55% of viewport height, the flavor cards roughly 25% -
+so a card is a little under half the product's height. The build had 34vw
+product and 12vw cards, which is why it felt small.
+
+**The arc bleeds off both edges.** The outermost cards are clipped by the screen
+so the arc implies continuation beyond the frame. Desktop and mobile both.
+
+**Autoplay is removed entirely.** The carousel is now click-to-choose: clicking
+a card rotates the arc so that card sweeps to center, and the roll then changes
+to that flavor. Nothing moves until the visitor acts. The arc motion is kept as
+the reward for clicking rather than as ambient decoration.
+
+**Five cards, not four.** A fifth "seasonal special" slot joins the four
+flavors, so the arc fills like the reference and Haaans has a promotable slot.
+Its name and image must be swappable from `js/data.js` alone.
+
+**Nav becomes a 5-icon pill:** Menu, Take & Bake, About, Instagram, Cart.
+Icons only, matching the reference. The cart is highlighted dark and orders the
+currently-selected flavor - it jumps to the order form with that flavor
+pre-filled, which is what connects the carousel to actually buying something.
+
+**Flavor name moves above the roll.** It previously sat beneath, competing with
+the price pill and the headline for the same band of space.
+
+**Headline and price pill both stay**, with the headline running behind the
+roll as in the reference. The larger product finally makes that overlap
+possible - it was removed earlier only because a small product left no room.
+
+**Palette is unchanged.** Cream and brown, as decided originally. The reference
+is dark olive; only its structure, proportions and motion are being copied.
+
+**Mobile scales the product to about 40%** of viewport height rather than 55%,
+so the nav, flavor name, pill and headline are not crowded off a phone screen.
+
+## Consequences
+
+- `js/carousel.js` loses its autoplay tween, drag-to-spin, and the
+  `restartSpin()` machinery that existed to keep autoplay coherent after
+  interaction. Hover-pause becomes meaningless and goes too. Keyboard stepping
+  stays, and clicking becomes the primary interaction.
+- `js/data.js` gains a fifth entry and its image paths change from `pan-*` to
+  `roll-*`. `tests/data.test.js` must be updated to match, including the
+  filename contract.
+- Existing `pan-*.webp` files are superseded.
