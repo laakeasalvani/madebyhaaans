@@ -2,6 +2,22 @@
 
 Single-page site for Haaans (@madebyhaaans) — homemade cinnamon rolls, Kaka'ako.
 
+**Live:** https://laakeasalvani.github.io/madebyhaaans/
+
+Deployed from `main` via GitHub Pages, so every push to `main` republishes the
+site within a minute or two. There is no build step and no staging site --
+treat a push to `main` as publishing.
+
+## Not finished yet
+
+The site is public but part-built. Still to come: Take & Bake, About and pickup
+details, and the order form. Nav icons for sections that do not exist remove
+themselves on load, so nothing on the page links to a dead anchor.
+
+Before promoting the link widely: `docs/PLACEHOLDER-IMAGES.md` lists the
+seasonal card and frosting tub, which are still stand-ins, and the order form
+will need Haaans' email plus a Web3Forms key.
+
 ## Preview locally
 
 ES modules will not load over `file://`. Serve the folder:
