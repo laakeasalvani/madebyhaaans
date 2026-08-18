@@ -1,0 +1,10 @@
+/* madebyhaaans — styles scaffold. Built out in later tasks. */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: system-ui, sans-serif;
+}
