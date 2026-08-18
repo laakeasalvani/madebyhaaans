@@ -1,6 +1,4 @@
 import { buildHero } from './hero-dom.js';
-import { FLAVORS } from './data.js';
+import { initCarousel } from './carousel.js';
 
-const hero = buildHero(document.querySelector('.hero'));
-hero.nameEl.textContent = FLAVORS[0].name;
-hero.priceEl.textContent = `$${FLAVORS[0].price}`;
+initCarousel(buildHero(document.querySelector('.hero')));
