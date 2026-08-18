@@ -288,3 +288,63 @@ h1, h2, h3 {
   .hero { padding-bottom: calc(3 * 0.88 * clamp(2rem, 7vw, 3rem) + 1.5rem); }
   .hero-headline { font-size: clamp(2rem, 7vw, 3rem); line-height: 0.88; max-width: 90vw; }
 }
+
+.menu-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(1rem, 2.5vw, 2rem);
+  perspective: 1000px;
+  margin-top: 2.5rem;
+}
+
+.menu-card {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  background: var(--frosting);
+  border-radius: 24px;
+  box-shadow: var(--shadow-soft);
+  transform-style: preserve-3d;
+  transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1), box-shadow 0.35s;
+  transform-origin: 50% 100%;
+}
+
+.menu-card:hover {
+  transform: translateY(-8px);
+  box-shadow: var(--shadow-lift);
+}
+
+.menu-card h3 { font-size: var(--step-1); margin-bottom: 0.35em; }
+
+.menu-price {
+  font-size: var(--step-2);
+  font-family: 'Fraunces', serif;
+  color: var(--caramel);
+  margin: 0 0 0.4em;
+}
+
+.menu-note-sm { color: var(--cinnamon); font-size: var(--step--1); margin: 0; }
+
+.menu-note {
+  margin-top: 2.5rem;
+  max-width: var(--measure);
+  color: var(--cinnamon);
+  font-size: var(--step--1);
+}
+
+/* The tipped-back start state applies ONLY once we know scripting is alive
+   (the inline head script sets .js, and main.js removes it again if GSAP
+   failed to load). Without this gate, a blocked CDN would leave the whole
+   menu invisible -- a far worse outcome than no animation. */
+/* Only opacity here. The tipped start transform is supplied by gsap.fromTo,
+   which writes it inline when the trigger fires; declaring it in CSS as well
+   left the cards stuck tipped after the reveal, because this rule kept
+   winning over GSAP's inline transform. */
+.js .menu-card {
+  opacity: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* Must match the .js gate's specificity (0,2,0) or it loses and the cards
+     stay at opacity 0, leaving reduced-motion users with a blank section. */
+  .js .menu-card { opacity: 1; transform: none; }
+  .menu-card:hover { transform: none; }
+}

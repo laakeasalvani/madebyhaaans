@@ -7,8 +7,12 @@ Single-page site for Haaans (@madebyhaaans) — homemade cinnamon rolls, Kaka'ak
 ES modules will not load over `file://`. Serve the folder:
 
 ```bash
-python3 -m http.server 8000
+python3 bin/serve.py 8000
 ```
+
+Use `bin/serve.py` rather than `python3 -m http.server`: it sends no-store
+headers. The stock server sends none, and browsers then cache CSS and JS
+aggressively enough to serve stale files after an edit.
 
 Then open http://localhost:8000
 
