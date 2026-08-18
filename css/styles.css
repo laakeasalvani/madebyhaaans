@@ -111,7 +111,13 @@ h1, h2, h3 {
   position: relative;
   min-height: 100svh;
   display: grid;
-  place-items: center;
+  justify-items: center;
+  /* Anchor the product stack to the bottom of a reserved zone rather than
+     centering across the full section -- the reserved padding-bottom keeps
+     the flavor name and price pill clear of the headline below them. See
+     .hero-headline for why this value has to match its own line math. */
+  align-content: end;
+  padding-bottom: calc(2 * 0.86 * clamp(2.3rem, 1.4rem + 4.2vw, 5rem) + 1.75rem);
   overflow: clip;
   background:
     radial-gradient(120% 80% at 50% 18%, var(--frosting) 0%, var(--cream) 45%, var(--cream-deep) 100%);
@@ -151,12 +157,11 @@ h1, h2, h3 {
   z-index: 10;
   display: grid;
   justify-items: center;
-  translate: 0 -4vh;
 }
 
 .hero-pans {
   position: relative;
-  width: clamp(240px, 34vw, 460px);
+  width: clamp(220px, 28vw, 360px);
   aspect-ratio: 1;
 }
 
@@ -208,7 +213,9 @@ h1, h2, h3 {
 }
 
 /* Oversized headline hugging the bottom, partly hidden behind the product --
-   the reference's signature move. */
+   the reference's signature move. Sized with its own clamp (not --step-5)
+   because .hero's padding-bottom above has to reserve exactly this much
+   room -- keep the two in sync if either changes. */
 .hero-headline {
   position: absolute;
   bottom: 0;
@@ -219,8 +226,8 @@ h1, h2, h3 {
   width: max-content;
   max-width: 96vw;
   text-align: center;
-  font-size: var(--step-5);
-  line-height: 0.92;
+  font-size: clamp(2.3rem, 1.4rem + 4.2vw, 5rem);
+  line-height: 0.86;
   color: var(--cinnamon-dark);
   opacity: 0.92;
   pointer-events: none;
@@ -266,9 +273,18 @@ h1, h2, h3 {
 @media (max-width: 767px) {
   .arc-card { border-radius: 30%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
   /* Shrink the nav rather than hiding it -- phones are the main audience and
-     still need a way to reach the menu and the order form. */
-  .nav-pill { gap: 0.6rem; padding: 0.45rem 0.8rem; font-size: 0.78rem; }
-  .nav-pill a { font-size: 0.78rem; }
+     still need a way to reach the menu and the order form. Nowrap plus a
+     tighter scale keeps it one line instead of wrapping each link. */
+  .nav-pill { gap: 0.4rem; padding: 0.4rem 0.65rem; font-size: 0.7rem; }
+  .nav-pill a { font-size: 0.7rem; white-space: nowrap; }
   .wordmark { font-size: var(--step-0); }
   .ig-button { padding: 0.45rem 0.8rem; }
+
+  /* At narrow widths the headline's second line soft-wraps again, so it
+     renders as three lines, not two -- the reserved space and its font
+     size are recalculated here to match, keeping the pill and flavor
+     name clear of it (same reasoning as the base .hero rule above). */
+  .hero-pans { width: clamp(190px, 42vw, 320px); }
+  .hero { padding-bottom: calc(3 * 0.88 * clamp(2rem, 7vw, 3rem) + 1.5rem); }
+  .hero-headline { font-size: clamp(2rem, 7vw, 3rem); line-height: 0.88; max-width: 90vw; }
 }
