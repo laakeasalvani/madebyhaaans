@@ -406,16 +406,29 @@ Run each generated image through the `remove_background` tool. The white backgro
 
 - [ ] **Step 5: Convert and resize**
 
-Pans render at 900px wide, cards at 320px wide, both as WebP. macOS `sips` handles this without installing anything:
+Pans render at 900px wide, cards at 320px wide, both as WebP.
+
+**Do not use `sips` — it cannot write WebP on this machine** (verified during the first
+Task 3 attempt). Use Pillow, already installed:
 
 ```bash
-cd ~/madebyhaaans/images
-for f in pan-*.png;  do sips -Z 900 -s format webp "$f" --out "${f%.png}.webp"; done
-for f in card-*.png; do sips -Z 320 -s format webp "$f" --out "${f%.png}.webp"; done
-sips -Z 400 -s format webp frosting-tub.png --out frosting-tub.webp
-sips -Z 1200 -s format webp mound.png --out mound.webp
+cd ~/madebyhaaans/images && python3 -c "
+from PIL import Image
+import glob, os
+sizes = {'pan-': 900, 'card-': 320, 'frosting-tub': 400, 'mound': 1200}
+for f in glob.glob('*.png'):
+    px = next((v for k, v in sizes.items() if f.startswith(k)), 900)
+    im = Image.open(f).convert('RGBA')
+    im.thumbnail((px, px), Image.LANCZOS)
+    out = f[:-4] + '.webp'
+    im.save(out, 'WEBP', quality=82, method=6)
+    print(out, im.size, os.path.getsize(out) // 1024, 'KB')
+"
 rm -f *.png
 ```
+
+The `.convert('RGBA')` matters: it preserves the transparency from background
+removal. Saving without it flattens the cut-out back onto white.
 
 - [ ] **Step 6: Verify the filename contract holds**
 
@@ -1923,9 +1936,20 @@ Run: `grep -n '<img' index.html`
 
 Generate 480px-wide variants of each pan and add `srcset` to the hero pans in `js/hero-dom.js`:
 
+**`sips` cannot write WebP on this machine** — discovered during Task 3. Use Pillow,
+which Task 3 already installed:
+
 ```bash
-cd ~/madebyhaaans/images
-for f in pan-*.webp; do sips -Z 480 "$f" --out "${f%.webp}-480.webp"; done
+cd ~/madebyhaaans/images && python3 -c "
+from PIL import Image
+import glob
+for f in glob.glob('pan-*.webp'):
+    if f.endswith('-480.webp'): continue
+    im = Image.open(f)
+    im.thumbnail((480, 480), Image.LANCZOS)
+    im.save(f.replace('.webp', '-480.webp'), 'WEBP', quality=82, method=6)
+    print('wrote', f.replace('.webp', '-480.webp'))
+"
 ```
 
 **This weakens the filename contract from Task 3:** overwriting `pan-original.webp`
@@ -1934,7 +1958,14 @@ would keep showing the old AI image. Record the follow-up command in `README.md`
 under "Swapping in real photos":
 
 ```bash
-cd images && for f in pan-*.webp; do case "$f" in *-480.webp) continue;; esac; sips -Z 480 "$f" --out "${f%.webp}-480.webp"; done
+cd images && python3 -c "
+from PIL import Image
+import glob
+for f in glob.glob('pan-*.webp'):
+    if f.endswith('-480.webp'): continue
+    im = Image.open(f); im.thumbnail((480, 480), Image.LANCZOS)
+    im.save(f.replace('.webp', '-480.webp'), 'WEBP', quality=82, method=6)
+"
 ```
 
 In `hero-dom.js`, after `img.src = f.panImage;` add:
