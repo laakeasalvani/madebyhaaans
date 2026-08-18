@@ -18,7 +18,9 @@ export function buildHero(root) {
     btn.dataset.index = String(i);
     btn.setAttribute('aria-label', `Show ${f.name}`);
     btn.innerHTML =
-      `<img src="${f.cardImage}" alt="" width="320" height="320" loading="lazy">` +
+      // Not lazy: these sit in the first screenful, so deferring them delays
+      // the most important images on the page.
+      `<img src="${f.cardImage}" alt="" width="320" height="320" decoding="async">` +
       `<span class="arc-card-label">${f.name}</span>`;
     arc.append(btn);
     return btn;
