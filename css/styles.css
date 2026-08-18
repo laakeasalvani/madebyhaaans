@@ -168,8 +168,8 @@ h1, h2, h3 {
   position: absolute;
   top: 46%;
   left: 50%;
-  width: 25vh;
-  height: 25vh;
+  width: 31vh;
+  height: 31vh;
   margin: 0;
   padding: 0;
   border: 0;
@@ -321,8 +321,13 @@ h1, h2, h3 {
 
 @media (max-width: 767px) {
   /* Roll drops to ~40% so the nav, name, pill and headline all still fit. */
-  .hero-rolls { width: 30vh; height: 30vh; }
-  .arc-card { width: 14vh; height: 14vh; border-radius: 26%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
+  /* A 375px screen cannot fit desktop-sized cards beside the product: they
+     end up tucked behind it with their labels clipped. Both shrink here so
+     each card sits fully on screen with its label readable. */
+  .hero-rolls { width: 28vh; height: 28vh; }
+  /* Lifted above the roll's widest band: at the shared centre line the
+     product overlapped each card's lower half, clipping its label. */
+  .arc-card { top: 36%; width: 15vh; height: 15vh; border-radius: 26%; box-shadow: 0 8px 18px -8px rgba(92, 58, 30, 0.3); }
   .nav-pill { gap: 0.05rem; padding: 0.25rem; }
   .nav-pill a, .nav-pill button { width: 2.1rem; height: 2.1rem; }
   .nav-pill svg { width: 1.05rem; height: 1.05rem; }

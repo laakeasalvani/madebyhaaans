@@ -25,8 +25,12 @@ export function initCarousel({ cards, rolls, nameEl, priceEl }) {
   //   half the product + half a card + a margin, all as fractions of height
   const clearance = () => {
     const h = window.innerHeight;
-    const productHalf = (NARROW.matches ? 0.15 : 0.275) * h;
-    const cardHalf = (NARROW.matches ? 0.07 : 0.125) * h;
+    // Measured from the DOM rather than hardcoded: the card and product sizes
+    // live in CSS, and a second copy of those numbers here would silently
+    // drift the moment either is retuned.
+    const rolls = document.querySelector('.hero-rolls');
+    const productHalf = (rolls ? rolls.offsetWidth : 0.55 * h) / 2;
+    const cardHalf = (cards[0] ? cards[0].offsetWidth : 0.31 * h) / 2;
     const ideal = productHalf + cardHalf + 0.03 * h;
     // On a narrow screen there is simply not enough width to sit a card beside
     // the product at the ideal distance -- pushing for it threw every card off
