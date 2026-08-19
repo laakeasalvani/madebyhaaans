@@ -36,3 +36,18 @@ test('exactly one flavor is the seasonal slot', () => {
   assert.equal(seasonal.length, 1, 'the arc expects one rotating special');
   assert.equal(seasonal[0].id, 'seasonal');
 });
+
+test('a single roll is $5 for every flavor', () => {
+  for (const f of FLAVORS) {
+    assert.equal(f.price, 5, `${f.id} should be a single-roll price of $5`);
+  }
+});
+
+test('single-roll prices are not confused with pan prices', () => {
+  // FLAVORS prices one roll; MENU prices a whole pan. If these ever collide,
+  // someone has edited the wrong list.
+  const panPrices = new Set(MENU.map((m) => m.price));
+  for (const f of FLAVORS) {
+    assert.ok(!panPrices.has(f.price), `${f.id} is priced like a pan, not a roll`);
+  }
+});
